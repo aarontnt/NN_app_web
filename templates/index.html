@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clasificación y Clustering de Estrés Humano</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}"> 
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <span class="brain-icon">🧠</span>
+            <h1>Clasificación y Clustering de Estrés Humano</h1>
+        </div>
+
+        <div class="main-grid">
+            <div class="sidebar">
+                <div class="upload-section" onclick="document.getElementById('csvFile').click()">
+                    <div class="upload-icon">📁</div>
+                    <div class="upload-text">Sube tu archivo CSV</div>
+                    <div class="upload-subtext">Coloque el archivo aquí</div>
+                    <div class="upload-subtext">Haga clic para cargar</div>
+                </div>
+                
+                <input type="file" id="csvFile" class="file-input" accept=".csv">
+                
+                <button class="btn" id="sample-btn">
+                    <span>📄</span> Descargar CSV de Ejemplo
+                </button>
+                
+                <div class="action-buttons">
+                    <button class="btn btn-analyze" id="analyzeBtn" disabled>
+                        <span>🔍</span> Analizar
+                    </button>
+                    <button class="btn btn-cluster" id="clusterBtn" disabled>
+                        <span>🔬</span> Hacer Clustering
+                    </button>
+                    <button class="btn btn-clean" id="cleanBtn">
+                        <span>🧹</span> Limpiar
+                    </button>
+                </div>
+            </div>
+
+            <div class="content-area">
+                <div class="tabs">
+                    <div class="tab active" data-tab="clasificacion">
+                        <span>📊</span> Clasificación
+                    </div>
+                    <div class="tab" data-tab="clustering">
+                        <span>🔍</span> Clustering
+                    </div>
+                    <div class="tab" data-tab="info">
+                        <span>ℹ️</span> Información
+                    </div>
+                </div>
+
+                <div id="clasificacion" class="tab-content active">
+                    <div class="results-header">Resultados de Clasificación</div>
+                    
+                    <div class="error-message" id="error-message"></div>
+                    
+                    <div class="preview-section" id="preview-section">
+                        <h4 style="margin-bottom: 15px; color: #f3f4f6;">Vista previa de datos (primeras 5 filas):</h4>
+                        <div class="preview-table" id="preview-table"></div>
+                        <p style="margin-top: 10px; color: #9ca3af; font-size: 0.9rem;">
+                            Total de filas: <span id="total-rows">0</span>
+                        </p>
+                    </div>
+                    
+                    <div class="loading" id="loading">
+                        <div class="spinner"></div>
+                        <div>Analizando datos...</div>
+                    </div>
+
+                    <div id="results-container" style="display: none;">
+                        <div class="results-table">
+                            <div class="table-header">
+                                <div>ID</div>
+                                <div>Predicción</div>
+                                <div>Confianza</div>
+                                <div>Riesgo</div>
+                            </div>
+                            <div id="results-tbody">
+                                <!-- Los resultados se insertarán aquí -->
+                            </div>
+                        </div>
+
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-number level-alto" id="stat-alto">0</div>
+                                <div class="stat-label">🔴 Alto Estrés</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-number level-medio" id="stat-medio">0</div>
+                                <div class="stat-label">🟡 Medio Estrés</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-number level-bajo" id="stat-bajo">0</div>
+                                <div class="stat-label">🟢 Bajo Estrés</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-number" id="stat-confianza">0%</div>
+                                <div class="stat-label">📊 Confianza Promedio</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="no-data" style="text-align: center; padding: 40px; color: #9ca3af;">
+                        📁 Sube un archivo CSV para comenzar el análisis
+                    </div>
+                </div>
+
+                <div id="clustering" class="tab-content">
+                    <div class="results-header">Resultados de Clustering</div>
+                    
+                    <div class="loading" id="loading-cluster">
+                        <div class="spinner"></div>
+                        <div>Ejecutando algoritmo K-means...</div>
+                    </div>
+
+                    <div id="cluster-results-container" style="display: none;">
+                        <div class="cluster-controls">
+                            <label for="num-clusters">Número de clusters:</label>
+                            <select id="num-clusters">
+                                <option value="2">2 clusters</option>
+                                <option value="3" selected>3 clusters</option>
+                                <option value="4">4 clusters</option>
+                                <option value="5">5 clusters</option>
+                            </select>
+                        </div>
+
+                        <div class="cluster-visualization" id="cluster-viz">
+                            <canvas id="cluster-canvas" width="800" height="400"></canvas>
+                        </div>
+
+                        <div class="cluster-stats" id="cluster-stats"></div>
+
+                        <div class="cluster-table-container">
+                            <div class="results-table">
+                                <div class="table-header">
+                                    <div>ID</div>
+                                    <div>Cluster</div>
+                                    <div>Distancia al Centro</div>
+                                    <div>Características</div>
+                                </div>
+                                <div id="cluster-results-tbody"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="no-cluster-data" style="text-align: center; padding: 40px; color: #9ca3af;">
+                        📊 Analiza los datos primero, luego ejecuta el clustering
+                    </div>
+                </div>
+
+                <div id="info" class="tab-content">
+                    <div class="info-section">
+                        <h3>📋 Información del Sistema</h3>
+                        
+                        <h4 style="color: #f3f4f6; margin: 20px 0 10px 0;">🧠 Algoritmo de Clasificación:</h4>
+                        <p>Sistema basado en reglas y scoring que evalúa múltiples factores para determinar el nivel de estrés.</p>
+                        
+                        <h4 style="color: #f3f4f6; margin: 20px 0 10px 0;">🔬 Algoritmo de Clustering:</h4>
+                        <p>Utiliza K-means clustering para agrupar estudiantes con patrones similares de estrés. El algoritmo considera todas las variables para encontrar grupos naturales en los datos.</p>
+                        
+                        <h4 style="color: #f3f4f6; margin: 20px 0 10px 0;">📊 Variables Esperadas en el CSV:</h4>
+                        <ul>
+                            <li><strong>self_esteem</strong>: Nivel de autoestima (0-10)</li>
+                            <li><strong>sleep_quality</strong>: Calidad del sueño (0-10)</li>
+                            <li><strong>academic_performance</strong>: Rendimiento académico (0-10)</li>
+                            <li><strong>social_support</strong>: Soporte social (0-10)</li>
+                            <li><strong>depression</strong>: Nivel de depresión (0-10)</li>
+                            <li><strong>study_load</strong>: Carga de estudio (0-10)</li>
+                            <li><strong>bullying</strong>: Experiencia de bullying (0-10)</li>
+                        </ul>
+                        
+                        <h4 style="color: #f3f4f6; margin: 20px 0 10px 0;">🎯 Clasificaciones:</h4>
+                        <ul>
+                            <li>🟢 <strong>Bajo Estrés</strong>: Condiciones favorables, riesgo mínimo</li>
+                            <li>🟡 <strong>Medio Estrés</strong>: Algunos factores de riesgo presentes</li>
+                            <li>🔴 <strong>Alto Estrés</strong>: Múltiples factores de riesgo, atención requerida</li>
+                        </ul>
+                        
+                        <h4 style="color: #f3f4f6; margin: 20px 0 10px 0;">💡 Cómo usar:</h4>
+                        <ol>
+                            <li>Prepara un archivo CSV con las columnas mencionadas arriba</li>
+                            <li>Sube el archivo usando el botón de carga</li>
+                            <li>Revisa la vista previa de los datos</li>
+                            <li>Haz clic en "Analizar" para procesar los datos</li>
+                            <li>Haz clic en "Hacer Clustering" para agrupar los datos</li>
+                            <li>Examina los resultados y estadísticas generadas</li>
+                        </ol>
+                        
+                        <h4 style="color: #f3f4f6; margin: 20px 0 10px 0;">⚠️ Notas importantes:</h4>
+                        <ul>
+                            <li>Todas las variables deben estar en escala 0-10</li>
+                            <li>Los valores faltantes se manejan automáticamente</li>
+                            <li>El algoritmo considera las interacciones entre variables</li>
+                            <li>Los resultados son orientativos, no diagnósticos médicos</li>
+                            <li>El clustering ayuda a identificar patrones ocultos en los datos</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
