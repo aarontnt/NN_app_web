@@ -3,3 +3,4 @@ pandas
 scikit-learn
 python-dotenv
 gunicorn
+tensorflow>=2.11.0
