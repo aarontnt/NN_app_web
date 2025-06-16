@@ -13,6 +13,7 @@ import numpy as np
 
 
 def crear_app():
+    app = Flask(__name__)
     class StressNeuralModel(BaseEstimator, ClassifierMixin):
         """Modelo simplificado que solo usa la red neuronal y el scaler"""
         def __init__(self, nn_model, scaler):
@@ -524,13 +525,13 @@ def crear_app():
             stress_model = None
     return app
 if __name__ == '__main__':
-    # Inicializar servidor
+    # Solo se ejecuta en desarrollo local
     initialize_server()
     app = crear_app()
-    # Configuración de desarrollo
     app.run(
         debug=True,
         host='0.0.0.0',
         port=5000,
         threaded=True
     )
+    
