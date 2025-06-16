@@ -4,4 +4,3 @@ scikit-learn
 python-dotenv
 gunicorn
 tensorflow>=2.11.0
-python-3.12.4
