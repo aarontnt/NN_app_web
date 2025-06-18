@@ -1,6 +1,12 @@
-flask
-pandas
-scikit-learn
-python-dotenv
-gunicorn
-tensorflow>=2.11.0
+flask==2.3.2
+gunicorn==20.1.0
+tensorflow==2.10.0
+scikit-learn==1.2.2
+pandas==1.5.3
+numpy==1.23.5
+joblib==1.2.0
+werkzeug==2.3.6
+matplotlib==3.7.1  # Para el clustering (gráficos)
+threadpoolctl==3.1.0  # Requerido por scikit-learn
+protobuf==3.20.3  # Evita conflictos con TensorFlow
+h5py==3.8.0  # Para manejar modelos .h5
