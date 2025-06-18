@@ -9,4 +9,4 @@ werkzeug==2.3.6
 matplotlib==3.7.1  # Para el clustering (gráficos)
 threadpoolctl==3.1.0  # Requerido por scikit-learn
 protobuf==3.20.3  # Evita conflictos con TensorFlow
-h5py==3.8.0  # Para manejar modelos .h5
+h5py
