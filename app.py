@@ -231,4 +231,7 @@ def crear_app():
 
     return app
 
+app = crear_app()
 # Nota: No incluimos app.run() porque Render usa gunicorn
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=8000)
