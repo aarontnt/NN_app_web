@@ -10,6 +10,8 @@ from werkzeug.utils import secure_filename
 import pandas as pd
 import numpy as np
 from flask import Flask
+np.core = np  # Parche mágico para evitar el error "numpy._core"
+from joblib import load
 
 def crear_app():
     app = Flask(__name__)
