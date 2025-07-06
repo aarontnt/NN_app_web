@@ -2,9 +2,9 @@ FROM python:3.9-slim
 
 WORKDIR /app
 
-# Instalar dependencias del sistema mínimas
+# Instalar dependencias del sistema
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    libhdf5-dev \  # Necesario para h5py (usado por TensorFlow)
+    libhdf5-dev \
     && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
